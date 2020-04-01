@@ -82,14 +82,18 @@ class Homepage extends Component {
           <div className="row  mt-4 p-3">
             {this.state.isLoading ? <Spinner /> : null}
 
-            {this.state.gifsData.map(val => (
-              <div className="col-lg-3 col-sm-4" key={val.id}>
-                <GifCard
-                  gifImg={val.images.fixed_height_downsampled.url}
-                  gifTitle={val.title}
-                />
-              </div>
-            ))}
+            {this.state.gifsData.map(val =>
+              val ? (
+                <div className="col-lg-3 col-sm-4" key={val.id}>
+                  <GifCard gifImg={val.images.fixed_height_downsampled.url} />
+                </div>
+              ) : (
+                // <span className="error-message">
+                //   Not found, try another Keyword.
+                // </span>
+                <h1>yeah</h1>
+              )
+            )}
           </div>
         </div>
       </main>
