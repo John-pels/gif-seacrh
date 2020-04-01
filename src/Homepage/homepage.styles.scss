@@ -46,13 +46,16 @@
         background: #090833;
         color: #FFF;
         border-radius: .2em;
+        outline: none;
         margin: 0 auto;
         width: 70%;
         height: 2.5em;
+        line-height: 2.5em;
         border: none;
         transition: all .5s ease-in-out;
 
         &:hover {
+            box-shadow: 0px 0px 3px 0px #090833;
             background: lighten(#090833, 5%);
         }
     }
