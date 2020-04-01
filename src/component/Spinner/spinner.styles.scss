@@ -1,0 +1,22 @@
+.loader {
+    position: relative;
+    left: 50%;
+    display: inline-block;
+    border: 4px solid rgba(44, 42, 42, 0.1);
+    border-left-color: #090833;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: donut-spin 1.2s linear infinite;
+
+
+    @keyframes donut-spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

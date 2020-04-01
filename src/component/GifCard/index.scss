@@ -1,0 +1,17 @@
+.gif-card {
+    display: flex;
+    flex-flow: column wrap;
+    box-shadow: 0px 0px 4px 0px #090833;
+    cursor: pointer;
+
+    .gif-img {
+        display: block;
+        width: 100%;
+        height: 200px;
+    }
+
+    .gif-title {
+        font-size: 1em;
+        color: #090833;
+    }
+}
