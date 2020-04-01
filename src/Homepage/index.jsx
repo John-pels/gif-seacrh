@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import "./homepage.styles.scss";
+import Spinner from "../component/Spinner";
+import GifCard from "../component/GifCard";
 
 class Homepage extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      keywords: ""
+      gifsData: [],
+      keywords: "",
+      isLoading: false
     };
   }
 
@@ -17,7 +21,29 @@ class Homepage extends Component {
 
   handleSearch = event => {
     event.preventDefault();
-    console.log(this.state.keywords);
+    this.setState({ isLoading: true });
+    const apiKey = "OYa73aJOBfbenMLiAav9ZXswodSdoTTW";
+    const url = "https://api.giphy.com/v1/gifs/search?api_key=";
+
+    fetch(
+      `${url}${apiKey}&q=${this.state.keywords}&limit=30&offset=0&rating=G&lang=en`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+    )
+      .then(response => response.json())
+      .then(gifs => {
+        this.setState({ gifsData: gifs.data });
+        console.log(this.state.gifsData);
+        this.setState({ isLoading: false });
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    this.setState({ keywords: "" });
   };
 
   render() {
@@ -39,6 +65,7 @@ class Homepage extends Component {
                   onChange={this.handleChange}
                   className="search-input mb-3"
                   placeholder="Enter any keywords"
+                  required
                 />
                 <button className="btn-search" onClick={this.handleSearch}>
                   Search
@@ -48,9 +75,16 @@ class Homepage extends Component {
           </div>
 
           <div className="row  mt-4 p-3">
-            <div className="col-lg-3 col-sm-4">
-              <div className="gif-card"></div>
-            </div>
+            {this.state.isLoading ? <Spinner /> : null}
+
+            {this.state.gifsData.map(val => (
+              <div className="col-lg-3 col-sm-4" key={val.id}>
+                <GifCard
+                  gifImg={val.images.fixed_height_downsampled.url}
+                  gifTitle={val.title}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </main>
