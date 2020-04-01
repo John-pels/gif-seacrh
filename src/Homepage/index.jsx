@@ -10,7 +10,8 @@ class Homepage extends Component {
     this.state = {
       gifsData: [],
       keywords: "",
-      isLoading: false
+      isLoading: false,
+      errorMessage: ""
     };
   }
 
@@ -20,24 +21,25 @@ class Homepage extends Component {
   };
 
   handleSearch = event => {
+    const { keywords, gifsData } = this.state;
+
     event.preventDefault();
-    this.setState({ isLoading: true });
+    keywords === ""
+      ? this.setState({ errorMessage: "Enter a keyword" })
+      : this.setState({ isLoading: true, errorMessage: "" });
     const apiKey = "OYa73aJOBfbenMLiAav9ZXswodSdoTTW";
     const url = "https://api.giphy.com/v1/gifs/search?api_key=";
 
-    fetch(
-      `${url}${apiKey}&q=${this.state.keywords}&limit=30&offset=0&rating=G&lang=en`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
+    fetch(`${url}${apiKey}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
       }
-    )
+    })
       .then(response => response.json())
       .then(gifs => {
         this.setState({ gifsData: gifs.data });
-        console.log(this.state.gifsData);
+        console.log(gifsData);
         this.setState({ isLoading: false });
       })
       .catch(error => {
@@ -58,6 +60,9 @@ class Homepage extends Component {
           <div className="row">
             <div className="col-lg-6 col-sm-12 offset-lg-3 justify-content-center">
               <form action="" className="search-form">
+                <span className="error-message text-center">
+                  {this.state.errorMessage}
+                </span>
                 <input
                   type="text"
                   name="keywords"

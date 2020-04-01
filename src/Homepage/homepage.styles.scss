@@ -22,6 +22,11 @@
         font-family: "Oleo Script", cursive;
     }
 
+    .error-message {
+        color: red;
+        transition: all .5s ease-in-out;
+    }
+
     .search-form {
         display: flex;
         flex-flow: column wrap;
