@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import GifDetails from "../Details";
 import "./homepage.styles.scss";
-import Spinner from "../component/Spinner";
-import GifCard from "../component/GifCard";
+import Spinner from "../../component/Spinner";
+import GifCard from "../../component/GifCard";
 
 class Homepage extends Component {
   constructor(props) {
@@ -27,10 +29,10 @@ class Homepage extends Component {
     keywords === ""
       ? this.setState({ errorMessage: "Enter a keyword" })
       : this.setState({ isLoading: true, errorMessage: "" });
-    const apiKey = "OYa73aJOBfbenMLiAav9ZXswodSdoTTW";
-    const url = "https://api.giphy.com/v1/gifs/search?api_key=";
+    const API_KEY = "OYa73aJOBfbenMLiAav9ZXswodSdoTTW";
+    const URL = "https://api.giphy.com/v1/gifs/search?api_key=";
 
-    fetch(`${url}${apiKey}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
+    fetch(`${URL}${API_KEY}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -72,28 +74,30 @@ class Homepage extends Component {
                   placeholder="Enter any keywords"
                   required
                 />
-                <button className="btn-search" onClick={this.handleSearch}>
+                <button
+                  className="btn-search"
+                  type="button"
+                  onClick={this.handleSearch}
+                >
                   Search
                 </button>
               </form>
             </div>
           </div>
 
-          <div className="row  mt-4 p-3">
+          <div className="row  mt-5 p-3">
             {this.state.isLoading ? <Spinner /> : null}
 
-            {this.state.gifsData.map(val =>
-              val ? (
-                <div className="col-lg-3 col-sm-4" key={val.id}>
+            {this.state.gifsData.map(val => (
+              <div className="col-lg-3 col-sm-4" key={val.id}>
+                <Link
+                  to="/details"
+                  render={() => <GifDetails gifTilte={val.title} />}
+                >
                   <GifCard gifImg={val.images.fixed_height_downsampled.url} />
-                </div>
-              ) : (
-                // <span className="error-message">
-                //   Not found, try another Keyword.
-                // </span>
-                <h1>yeah</h1>
-              )
-            )}
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </main>
