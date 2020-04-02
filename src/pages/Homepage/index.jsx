@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import GifDetails from "../Details";
+import { Route, Link } from "react-router-dom";
+import { API_KEY, URL } from "../../config.js";
 import "./homepage.styles.scss";
 import Spinner from "../../component/Spinner";
 import GifCard from "../../component/GifCard";
+import GifDetails from "../Details/index.jsx";
 
 class Homepage extends Component {
   constructor(props) {
@@ -23,14 +24,12 @@ class Homepage extends Component {
   };
 
   handleSearch = event => {
-    const { keywords, gifsData } = this.state;
+    const { keywords } = this.state;
 
     event.preventDefault();
     keywords === ""
       ? this.setState({ errorMessage: "Enter a keyword" })
       : this.setState({ isLoading: true, errorMessage: "" });
-    const API_KEY = "OYa73aJOBfbenMLiAav9ZXswodSdoTTW";
-    const URL = "https://api.giphy.com/v1/gifs/search?api_key=";
 
     fetch(`${URL}${API_KEY}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
       method: "GET",
@@ -41,11 +40,15 @@ class Homepage extends Component {
       .then(response => response.json())
       .then(gifs => {
         this.setState({ gifsData: gifs.data });
-        console.log(gifsData);
+        console.log(gifs);
         this.setState({ isLoading: false });
       })
       .catch(error => {
         console.log(error);
+        this.setState({
+          errorMessage: "Something went wrong, Please try again.",
+          isLoading: false
+        });
       });
     this.setState({ keywords: "" });
   };
@@ -91,11 +94,17 @@ class Homepage extends Component {
             {this.state.gifsData.map(val => (
               <div className="col-lg-3 col-sm-4" key={val.id}>
                 <Link
-                  to="/details"
-                  render={() => <GifDetails gifTilte={val.title} />}
+                  to={{
+                    pathname: `gifdetails/${val.id}`,
+                    state: val
+                  }}
                 >
                   <GifCard gifImg={val.images.fixed_height_downsampled.url} />
                 </Link>
+                <Route
+                  path={`${this.props.match.path}/:id`}
+                  component={GifDetails}
+                />
               </div>
             ))}
           </div>
