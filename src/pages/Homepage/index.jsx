@@ -40,7 +40,6 @@ class Homepage extends Component {
       .then(response => response.json())
       .then(gifs => {
         this.setState({ gifsData: gifs.data });
-        console.log(gifs);
         this.setState({ isLoading: false });
       })
       .catch(error => {
