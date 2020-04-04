@@ -50,7 +50,9 @@
   .search-input {
     height: 3em;
     outline: none;
+    border: 1px solid grey;
     padding-left: 1em;
+    border-radius: .3em;
     transition: all 0.5s ease-in-out;
 
     &:hover,
@@ -66,7 +68,7 @@
     color: #fff;
     border-radius: 0.2em;
     outline: none;
-    margin: 0 auto;
+    margin: 1em auto;
     width: 70%;
     height: 2.5em;
     line-height: 2.5em;
