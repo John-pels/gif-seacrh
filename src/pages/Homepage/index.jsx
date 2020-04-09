@@ -14,16 +14,16 @@ class Homepage extends Component {
       gifsData: [],
       keywords: "",
       isLoading: false,
-      errorMessage: ""
+      errorMessage: "",
     };
   }
 
-  handleChange = event => {
+  handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
-  handleSearch = event => {
+  handleSubmit = (event) => {
     const { keywords } = this.state;
 
     event.preventDefault();
@@ -34,19 +34,19 @@ class Homepage extends Component {
     fetch(`${URL}${API_KEY}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     })
-      .then(response => response.json())
-      .then(gifs => {
+      .then((response) => response.json())
+      .then((gifs) => {
         this.setState({ gifsData: gifs.data });
         this.setState({ isLoading: false });
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
         this.setState({
           errorMessage: "Something went wrong, Please try again.",
-          isLoading: false
+          isLoading: false,
         });
       });
     this.setState({ keywords: "" });
@@ -63,7 +63,11 @@ class Homepage extends Component {
           </div>
           <div className="row">
             <div className="col-lg-6 col-sm-12 offset-lg-3 justify-content-center">
-              <form action="" className="search-form">
+              <form
+                action=""
+                className="search-form"
+                onSubmit={this.handleSubmit}
+              >
                 <span className="error-message text-center">
                   {this.state.errorMessage}
                 </span>
@@ -76,11 +80,7 @@ class Homepage extends Component {
                   placeholder="Enter any keywords"
                   required
                 />
-                <button
-                  className="btn-search"
-                  type="button"
-                  onClick={this.handleSearch}
-                >
+                <button className="btn-search" type="submit">
                   Search
                 </button>
               </form>
@@ -90,12 +90,12 @@ class Homepage extends Component {
           <div className="row  mt-5 p-3">
             {this.state.isLoading ? <Spinner /> : null}
 
-            {this.state.gifsData.map(val => (
+            {this.state.gifsData.map((val) => (
               <div className="col-lg-3 col-sm-4" key={val.id}>
                 <Link
                   to={{
                     pathname: `gifdetails/${val.id}`,
-                    state: val
+                    state: val,
                   }}
                 >
                   <GifCard gifImg={val.images.fixed_height_downsampled.url} />
