@@ -80,7 +80,11 @@ class Homepage extends Component {
                   placeholder="Enter any keywords"
                   required
                 />
-                <button className="btn-search" type="submit">
+                <button
+                  className="btn-search"
+                  type="submit"
+                  onClick={this.handleSubmit}
+                >
                   Search
                 </button>
               </form>
