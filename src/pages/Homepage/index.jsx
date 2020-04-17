@@ -16,7 +16,7 @@ const Homepage = (props) => {
     const { value } = event.target;
     setKeywords(value);
   };
-  const regexCheck = /\s./g.test(keywords);
+  const regexCheck = /[ !"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~]/g.test(keywords);
 
   const handleSubmit = (event) => {
     event.preventDefault();
