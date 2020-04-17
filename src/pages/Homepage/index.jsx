@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Route, Link } from "react-router-dom";
-import { API_KEY, URL } from "../../config.js";
+import { API_KEY, URL, RATING, LANG, OFFSET, LIMIT } from "../../config.js";
 import "./homepage.styles.scss";
 import Spinner from "../../component/Spinner";
 import GifCard from "../../component/GifCard";
@@ -16,19 +16,23 @@ const Homepage = (props) => {
     const { value } = event.target;
     setKeywords(value);
   };
+  const regexCheck = /\s./g.test(keywords);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    keywords === ""
-      ? setErrorMessage("Enter a keyword")
+    regexCheck || keywords === ""
+      ? setErrorMessage("Enter a keyword or Figure")
       : setIsLoading(true) && setErrorMessage("");
 
-    fetch(`${URL}${API_KEY}&q=${keywords}&limit=30&offset=0&rating=G&lang=en`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `${URL}${API_KEY}&q=${keywords}&${LIMIT}&${OFFSET}&${RATING}&${LANG}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((gifs) => {
         setGifsData(gifs.data);
@@ -75,17 +79,17 @@ const Homepage = (props) => {
         </div>
 
         <div className="row  mt-5 p-3">
-          {isLoading ? <Spinner /> : null}
+          {isLoading && <Spinner />}
 
-          {gifsData.map((val) => (
-            <div className="col-lg-3 col-sm-4" key={val.id}>
+          {gifsData.map((gif) => (
+            <div className="col-lg-3 col-sm-4" key={gif.id}>
               <Link
                 to={{
-                  pathname: `gifdetails/${val.id}`,
-                  state: val,
+                  pathname: `gifdetails/${gif.id}`,
+                  state: gif,
                 }}
               >
-                <GifCard gifImg={val.images.fixed_height_downsampled.url} />
+                <GifCard gifImg={gif.images.fixed_height_downsampled.url} />
               </Link>
               <Route path={`${props.match.path}/:id`} component={GifDetails} />
             </div>
